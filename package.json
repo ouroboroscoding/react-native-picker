@@ -1,0 +1,31 @@
+{
+	"name": "react-native-select-picker",
+	"version": "0.1.0",
+	"description": "A replacement Picker for React-Native that relies on no other packages",
+	"main": "index",
+	"scripts": {
+	  "test": "echo \"Error: no test specified.\""
+	},
+	"repository": {
+	  "type": "git",
+	  "url": "https://github.com/ouroboroscoding/react-native-select-picker.git"
+	},
+	"keywords": [
+	  "react-native",
+	  "react",
+	  "picker",
+	  "select"
+	],
+	"author": "Chris Nasr <chris@ouroboroscoding.com>",
+	"license": "Apache-2.0",
+	"bugs": {
+	  "url": "https://github.com/ouroboroscoding/react-native-select-picker/issues"
+	},
+	"dependencies": {
+		"prop-types": "^15.5.7"
+	},
+	"peerDependencies": {
+		"react-native": "^0.66.0",
+		"react": "^15.5.0"
+	}
+}
