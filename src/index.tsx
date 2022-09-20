@@ -9,21 +9,24 @@
  */
 
 // NPM Imports
-import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import {
 	Modal,
+	NativeSyntheticEvent,
+	NativeScrollEvent,
 	Pressable,
 	ScrollView,
+	StyleProp,
 	StyleSheet,
 	Text,
 	TextInput,
+	TextStyle,
 	TouchableOpacity,
 	View
 } from 'react-native';
 
 // Constants
-const ITEM_HEIGHT = 40;
+const ITEM_HEIGHT: number = 40;
 
 /**
  * Array Find Index
@@ -33,18 +36,33 @@ const ITEM_HEIGHT = 40;
  *
  * @name afindi
  * @access public
- * @param array a				The value to look through
- * @param str k					The name of the key to check
- * @param mixed v				The value to check against
+ * @param {Array} a	The value to look through
+ * @param {string} k The name of the key to check
+ * @param {any} v The value to check against
  * @return object
  */
-function afindi(a, k, v) {
+function afindi(a: any[], k: string, v: any): number {
 	for(let i = 0; i < a.length; ++i) {
 		if(a[i][k] === v) {
 			return i;
 		}
 	}
 	return -1;
+}
+
+interface PickerOption {
+	value: any,
+	text: string
+}
+
+type PickerOnChanged = (value: any) => void;
+
+type PickerProps = {
+	onChanged: PickerOnChanged,
+	options: PickerOption[],
+	style?: StyleProp<TextStyle>,
+	textAlign?: 'left' | 'center' | 'right',
+	value: any
 }
 
 /**
@@ -57,19 +75,19 @@ function afindi(a, k, v) {
  * @param {Object} props Properties passed to the component
  * @returns React.Component
  */
-export default function Picker(props) {
+const Picker = (props: PickerProps) => {
 
 	// State
-	let [open, openSet] = useState(false);
-	let [text, textSet] = useState('');
+	const [open, openSet] = useState(false);
+	const [text, textSet] = useState('');
 
 	// Refs
-	let scrollRef = useRef();
-	let scrollTimer = useRef();
+	const scrollRef = useRef<ScrollView | null>(null);
+	const scrollTimer = useRef<number | null>(null);
 
 	// Value effect
 	useEffect(() => {
-		let i = afindi(props.options, 'value', props.value);
+		const i = afindi(props.options, 'value', props.value);
 		textSet(i > -1 ? props.options[i].text : '');
 	}, [props.value, props.options]);
 
@@ -77,10 +95,10 @@ export default function Picker(props) {
 	useEffect(() => {
 
 		// If we have a ref to the scroll view
-		if(scrollRef) {
+		if(scrollRef.current) {
 
 			// Get the index of the value
-			let i = afindi(props.options, 'value', open);
+			const i = afindi(props.options, 'value', open);
 			if(i > -1) {
 				scrollTo(i);
 			}
@@ -100,10 +118,10 @@ export default function Picker(props) {
 	}
 
 	// Called when the options are scrolled
-	function scrolled(ev) {
+	function scrolled(ev: NativeSyntheticEvent<NativeScrollEvent>) {
 
 		// Calculate the index based on the current y
-		let i = Math.round(ev.nativeEvent.contentOffset.y / ITEM_HEIGHT);
+		const i = Math.round(ev.nativeEvent.contentOffset.y / ITEM_HEIGHT);
 
 		// Set timer for setting the new option
 		if(scrollTimer.current) {
@@ -113,7 +131,7 @@ export default function Picker(props) {
 
 			// If the value has actually changed, set it, that will take care
 			//	of scrolling directly on it
-			if(props.options[i].value != open) {
+			if(props.options[i].value !== open) {
 				openSet(props.options[i].value);
 			}
 
@@ -122,18 +140,22 @@ export default function Picker(props) {
 			else {
 				scrollTo(i);
 			}
-		}, 200);
+		}, 100);
 	}
 
 	// Called to scroll the view to the index
-	function scrollTo(i) {
+	function scrollTo(i: number) {
 
-		// Scroll to the given item based on index and item height
-		scrollRef.current.scrollTo({
-			x: 0,
-			y: i * ITEM_HEIGHT,
-			animated: true
-		});
+		// Assuming we have the ref
+		if(scrollRef.current) {
+
+			// Scroll to the given item based on index and item height
+			scrollRef.current.scrollTo({
+				x: 0,
+				y: i * ITEM_HEIGHT,
+				animated: true
+			});
+		}
 	}
 
 	// Render component
@@ -191,6 +213,7 @@ export default function Picker(props) {
 		</>
 	);
 }
+export default Picker;
 
 // Styles
 const styles = StyleSheet.create({
@@ -260,26 +283,3 @@ const styles = StyleSheet.create({
 		height: ITEM_HEIGHT
 	}
 });
-
-// Valid props
-Picker.propTypes = {
-	onChanged: PropTypes.func.isRequired,
-	options: PropTypes.arrayOf(
-		PropTypes.exact({
-			value: PropTypes.any,
-			text: PropTypes.string
-		})
-	).isRequired,
-	style: PropTypes.oneOfType([
-		PropTypes.arrayOf(PropTypes.object),
-		PropTypes.object
-	]),
-	textAlign: PropTypes.oneOf(['left', 'center', 'right']),
-	value: PropTypes.any.isRequired
-}
-
-// Default props
-Picker.defaultProps = {
-	style: {},
-	textAlign: 'left'
-}
