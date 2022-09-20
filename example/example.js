@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native';
-import Picker from 'react-native-select-picker';
+import Picker from '@ouroboros/react-native-picker';
 
 import Countries from './countries.json';
 

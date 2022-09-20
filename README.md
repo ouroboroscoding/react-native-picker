@@ -1,4 +1,4 @@
-# react-native-select-picker
+# @ouroboros/react-native-picker
 
 Coming to the react-native party a bit late, I discovered that the standard Picker component no longer seems to exist, that it was removed from React-Native sometime at the end of 2021 in favour community packages which themselves started to break in 2022 due to no Picker being available. Since no alternative was presented, and I liked the look and feel of the iOS picker, I decided to attempt to recreate it using in pure react native components and offer it up to the community.
 
@@ -7,13 +7,13 @@ Coming to the react-native party a bit late, I discovered that the standard Pick
 react-native
 
 ```bash
-npm install react-native-select-picker
+npm install @ouroboros/react-native-picker
 ```
 
 react-native expo
 
 ```bash
-expo install react-native-select-picker
+expo install @ouroboros/react-native-picker
 ```
 
 ## Getting Started
@@ -21,7 +21,7 @@ expo install react-native-select-picker
 Import Picker from react-native-select-picker:
 
 ```javascript
-import Picker from 'react-native-select-picker';
+import Picker from '@ouroboros/react-native-picker';
 ```
 
 Create a state variable for the picker value:

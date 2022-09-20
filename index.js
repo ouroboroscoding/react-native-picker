@@ -38,7 +38,7 @@ const ITEM_HEIGHT = 40;
  * @param mixed v				The value to check against
  * @return object
  */
- export function afindi(a, k, v) {
+function afindi(a, k, v) {
 	for(let i = 0; i < a.length; ++i) {
 		if(a[i][k] === v) {
 			return i;
