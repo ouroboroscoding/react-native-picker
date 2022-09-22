@@ -1,9 +1,9 @@
 {
 	"name": "@ouroboros/react-native-picker",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "A replacement Picker for React-Native that relies on no other packages",
-	"main": "lib/index.js",
-	"types": "lib/index.d.ts",
+	"main": "index.js",
+	"types": "index.d.ts",
 	"scripts": {
 		"build": "tslint -p tsconfig.json && tsc",
 		"clean": "rm lib/*",
@@ -21,7 +21,7 @@
 		"select"
 	],
 	"author": "Chris Nasr <chris@ouroboroscoding.com>",
-	"license": "Apache-2.0",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/ouroboroscoding/react-native-picker/issues"
 	},
@@ -34,7 +34,9 @@
 		"tslint-config-prettier": "^1.18.0",
 		"typescript": "^4.8.3"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"@ouroboros/tools": "^0.1.0"
+	},
 	"peerDependencies": {
 		"react": ">=16.8",
 		"react-native": ">=0.66"

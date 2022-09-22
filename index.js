@@ -8,31 +8,11 @@
  * @created 2022-09-18
  */
 // NPM Imports
+import { afindi, afindo } from '@ouroboros/tools';
 import { useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 // Constants
 const ITEM_HEIGHT = 40;
-/**
- * Array Find Index
- *
- * Finds a specific object in an array based on key name and value and
- * returns its index
- *
- * @name afindi
- * @access public
- * @param {Array} a	The value to look through
- * @param {string} k The name of the key to check
- * @param {any} v The value to check against
- * @return object
- */
-function afindi(a, k, v) {
-    for (let i = 0; i < a.length; ++i) {
-        if (a[i][k] === v) {
-            return i;
-        }
-    }
-    return -1;
-}
 /**
  * Picker
  *
@@ -52,8 +32,8 @@ const Picker = (props) => {
     const scrollTimer = useRef(null);
     // Value effect
     useEffect(() => {
-        const i = afindi(props.options, 'value', props.value);
-        textSet(i > -1 ? props.options[i].text : '');
+        const o = afindo(props.options, 'value', props.value);
+        textSet(o ? o.text : '');
     }, [props.value, props.options]);
     // Open effect
     useEffect(() => {
@@ -110,38 +90,38 @@ const Picker = (props) => {
     }
     // Render component
     return (<>
-			<Pressable onPress={() => openSet(props.value)}>
-				<View pointerEvents="none">
-					<TextInput caretHidden={true} style={props.style} textAlign={props.textAlign} value={text}/>
-				</View>
-			</Pressable>
-			{open !== false &&
+            <Pressable onPress={() => openSet(props.value)}>
+                <View pointerEvents="none">
+                    <TextInput caretHidden={true} style={props.style} textAlign={props.textAlign} value={text}/>
+                </View>
+            </Pressable>
+            {open !== false &&
             <Modal animationType="fade" onRequestClose={() => openSet(false)} transparent={true} visible={true}>
-					<View style={styles.modal}>
-						<View style={styles.container}>
-							<View style={styles.header}>
-								<TouchableOpacity onPress={done} style={styles.done}>
-									<Text style={styles.doneText}>Done</Text>
-								</TouchableOpacity>
-							</View>
-							<ScrollView bounces={false} onScroll={scrolled} ref={scrollRef} style={styles.items}>
-								<View style={styles.item}></View>
-								{props.options.map(o => <Pressable key={o.value} onPress={() => openSet(o.value)}>
-										<View style={styles.item}>
-											<Text style={styles.itemText}>{o.text}</Text>
-										</View>
-									</Pressable>)}
-								<View style={styles.item}></View>
-							</ScrollView>
-							<View style={styles.overlay} pointerEvents="none">
-								<View style={styles.overlayFog}></View>
-								<View style={styles.overlaySelected}></View>
-								<View style={styles.overlayFog}></View>
-							</View>
-						</View>
-					</View>
-				</Modal>}
-		</>);
+                    <View style={styles.modal}>
+                        <View style={styles.container}>
+                            <View style={styles.header}>
+                                <TouchableOpacity onPress={done} style={styles.done}>
+                                    <Text style={styles.doneText}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <ScrollView bounces={false} onScroll={scrolled} ref={scrollRef} style={styles.items}>
+                                <View style={styles.item}></View>
+                                {props.options.map(o => <Pressable key={o.value} onPress={() => openSet(o.value)}>
+                                        <View style={styles.item}>
+                                            <Text style={styles.itemText}>{o.text}</Text>
+                                        </View>
+                                    </Pressable>)}
+                                <View style={styles.item}></View>
+                            </ScrollView>
+                            <View style={styles.overlay} pointerEvents="none">
+                                <View style={styles.overlayFog}></View>
+                                <View style={styles.overlaySelected}></View>
+                                <View style={styles.overlayFog}></View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>}
+        </>);
 };
 export default Picker;
 // Styles

@@ -10,12 +10,12 @@
 		"types": ["react-native", "jest"],
 		"moduleResolution": "node",
 		"noEmit": false,
-		"outDir": "./lib",
 		"strict": true,
 		"target": "esnext"
 	},
-	"include": ["src"],
+	"include": ["./"],
 	"exclude": [
+		"example",
 		"node_modules",
 		"babel.config.js",
 		"metro.config.js",
