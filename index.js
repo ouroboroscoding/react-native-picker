@@ -91,9 +91,11 @@ const Picker = (props) => {
     // Render component
     return (<>
             <Pressable onPress={() => openSet(props.value)}>
-                <View pointerEvents="none">
-                    <TextInput caretHidden={true} style={props.style} textAlign={props.textAlign} value={text}/>
-                </View>
+                {props.component ?
+            <props.component text={text}/> :
+            <View pointerEvents="none">
+                        <TextInput caretHidden={true} style={props.style} textAlign={props.textAlign} value={text}/>
+                    </View>}
             </Pressable>
             {open !== false &&
             <Modal animationType="fade" onRequestClose={() => openSet(false)} transparent={true} visible={true}>

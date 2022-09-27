@@ -37,12 +37,13 @@ interface PickerOption {
 type PickerOnChanged = (value: any) => void;
 
 type PickerProps = {
+    component?: React.ElementType,
     onChanged: PickerOnChanged,
     options: PickerOption[],
     style?: StyleProp<TextStyle>,
     textAlign?: 'left' | 'center' | 'right',
     value: any
-}
+};
 
 /**
  * Picker
@@ -141,14 +142,17 @@ const Picker = (props: PickerProps) => {
     return (
         <>
             <Pressable onPress={() => openSet(props.value)}>
-                <View pointerEvents="none">
-                    <TextInput
-                        caretHidden={true}
-                        style={props.style}
-                        textAlign={props.textAlign}
-                        value={text}
-                    />
-                </View>
+                {props.component ?
+                    <props.component text={text} /> :
+                    <View pointerEvents="none">
+                        <TextInput
+                            caretHidden={true}
+                            style={props.style}
+                            textAlign={props.textAlign}
+                            value={text}
+                        />
+                    </View>
+                }
             </Pressable>
             {open !== false &&
                 <Modal
