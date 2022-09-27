@@ -1,31 +1,44 @@
 {
-	"name": "react-native-select-picker",
-	"version": "0.1.0",
+	"name": "@ouroboros/react-native-picker",
+	"version": "0.2.0",
 	"description": "A replacement Picker for React-Native that relies on no other packages",
-	"main": "index",
+	"main": "index.js",
+	"types": "index.d.ts",
 	"scripts": {
-	  "test": "echo \"Error: no test specified.\""
+		"build": "tslint -p tsconfig.json && tsc",
+		"clean": "rm lib/*",
+		"test": "echo \"Error: no test specified.\" && exit 1"
 	},
 	"repository": {
-	  "type": "git",
-	  "url": "https://github.com/ouroboroscoding/react-native-select-picker.git"
+		"type": "git",
+		"url": "git+https://github.com/ouroboroscoding/react-native-picker.git"
 	},
 	"keywords": [
-	  "react-native",
-	  "react",
-	  "picker",
-	  "select"
+		"react-native",
+		"react",
+		"expo",
+		"picker",
+		"select"
 	],
 	"author": "Chris Nasr <chris@ouroboroscoding.com>",
-	"license": "Apache-2.0",
+	"license": "MIT",
 	"bugs": {
-	  "url": "https://github.com/ouroboroscoding/react-native-select-picker/issues"
+		"url": "https://github.com/ouroboroscoding/react-native-picker/issues"
+	},
+	"devDependencies": {
+		"@types/jest": "^29.0.3",
+		"@types/react": "^18.0.20",
+		"@types/react-native": "^0.70.2",
+		"@types/react-test-renderer": "^18.0.0",
+		"tslint": "^6.1.3",
+		"tslint-config-prettier": "^1.18.0",
+		"typescript": "^4.8.3"
 	},
 	"dependencies": {
-		"prop-types": "^15.5.7"
+		"@ouroboros/tools": "^0.1.0"
 	},
 	"peerDependencies": {
-		"react-native": "^0.66.0",
-		"react": "^15.5.0"
+		"react": ">=16.8",
+		"react-native": ">=0.66"
 	}
 }

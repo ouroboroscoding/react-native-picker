@@ -7,12 +7,44 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2022-09-18
  */
+
 // NPM Imports
 import { afindi, afindo } from '@ouroboros/tools';
 import { useEffect, useRef, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+    Modal,
+    NativeSyntheticEvent,
+    NativeScrollEvent,
+    Pressable,
+    ScrollView,
+    StyleProp,
+    StyleSheet,
+    Text,
+    TextInput,
+    TextStyle,
+    TouchableOpacity,
+    View
+} from 'react-native';
+
 // Constants
-const ITEM_HEIGHT = 40;
+const ITEM_HEIGHT: number = 40;
+
+interface PickerOption {
+    value: any,
+    text: string
+}
+
+type PickerOnChanged = (value: any) => void;
+
+type PickerProps = {
+    component?: React.ElementType,
+    onChanged: PickerOnChanged,
+    options: PickerOption[],
+    style?: StyleProp<TextStyle>,
+    textAlign?: 'left' | 'center' | 'right',
+    value: any
+};
+
 /**
  * Picker
  *
@@ -23,52 +55,66 @@ const ITEM_HEIGHT = 40;
  * @param {Object} props Properties passed to the component
  * @returns React.Component
  */
-const Picker = (props) => {
+const Picker = (props: PickerProps) => {
+
     // State
     const [open, openSet] = useState(false);
     const [text, textSet] = useState('');
+
     // Refs
-    const scrollRef = useRef(null);
-    const scrollTimer = useRef(null);
+    const scrollRef = useRef<ScrollView | null>(null);
+    const scrollTimer = useRef<number | null>(null);
+
     // Value effect
     useEffect(() => {
         const o = afindo(props.options, 'value', props.value);
         textSet(o ? o.text : '');
     }, [props.value, props.options]);
+
     // Open effect
     useEffect(() => {
+
         // If we have a ref to the scroll view
-        if (scrollRef.current) {
+        if(scrollRef.current) {
+
             // Get the index of the value
             const i = afindi(props.options, 'value', open);
-            if (i > -1) {
+            if(i > -1) {
                 scrollTo(i);
             }
         }
     }, [open]);
+
     // Called to set the new value
     function done() {
+
         // If the value changed, notify the parent
-        if (open !== props.value) {
+        if(open !== props.value) {
             props.onChanged(open);
         }
+
         // Hide the options
         openSet(false);
     }
+
     // Called when the options are scrolled
-    function scrolled(ev) {
+    function scrolled(ev: NativeSyntheticEvent<NativeScrollEvent>) {
+
         // Calculate the index based on the current y
         const i = Math.round(ev.nativeEvent.contentOffset.y / ITEM_HEIGHT);
+
         // Set timer for setting the new option
-        if (scrollTimer.current) {
+        if(scrollTimer.current) {
             clearTimeout(scrollTimer.current);
         }
         scrollTimer.current = setTimeout(() => {
+
             // If the value has actually changed, set it, that will take care
             //	of scrolling directly on it
-            if (props.options[i].value !== open) {
+            if(props.options[i].value !== open) {
                 openSet(props.options[i].value);
             }
+
             // Else, if the value hasn't changed, take care of re-centering the
             //	current value
             else {
@@ -76,10 +122,13 @@ const Picker = (props) => {
             }
         }, 100);
     }
+
     // Called to scroll the view to the index
-    function scrollTo(i) {
+    function scrollTo(i: number) {
+
         // Assuming we have the ref
-        if (scrollRef.current) {
+        if(scrollRef.current) {
+
             // Scroll to the given item based on index and item height
             scrollRef.current.scrollTo({
                 x: 0,
@@ -88,17 +137,30 @@ const Picker = (props) => {
             });
         }
     }
+
     // Render component
-    return (<>
+    return (
+        <>
             <Pressable onPress={() => openSet(props.value)}>
                 {props.component ?
-            <props.component text={text}/> :
-            <View pointerEvents="none">
-                        <TextInput caretHidden={true} style={props.style} textAlign={props.textAlign} value={text}/>
-                    </View>}
+                    <props.component text={text} /> :
+                    <View pointerEvents="none">
+                        <TextInput
+                            caretHidden={true}
+                            style={props.style}
+                            textAlign={props.textAlign}
+                            value={text}
+                        />
+                    </View>
+                }
             </Pressable>
             {open !== false &&
-            <Modal animationType="fade" onRequestClose={() => openSet(false)} transparent={true} visible={true}>
+                <Modal
+                    animationType="fade"
+                    onRequestClose={() => openSet(false)}
+                    transparent={true}
+                    visible={true}
+                >
                     <View style={styles.modal}>
                         <View style={styles.container}>
                             <View style={styles.header}>
@@ -106,13 +168,20 @@ const Picker = (props) => {
                                     <Text style={styles.doneText}>Done</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView bounces={false} onScroll={scrolled} ref={scrollRef} style={styles.items}>
+                            <ScrollView
+                                bounces={false}
+                                onScroll={scrolled}
+                                ref={scrollRef}
+                                style={styles.items}
+                            >
                                 <View style={styles.item}></View>
-                                {props.options.map(o => <Pressable key={o.value} onPress={() => openSet(o.value)}>
+                                {props.options.map(o =>
+                                    <Pressable key={o.value} onPress={() => openSet(o.value)}>
                                         <View style={styles.item}>
                                             <Text style={styles.itemText}>{o.text}</Text>
                                         </View>
-                                    </Pressable>)}
+                                    </Pressable>
+                                )}
                                 <View style={styles.item}></View>
                             </ScrollView>
                             <View style={styles.overlay} pointerEvents="none">
@@ -122,10 +191,13 @@ const Picker = (props) => {
                             </View>
                         </View>
                     </View>
-                </Modal>}
-        </>);
-};
+                </Modal>
+            }
+        </>
+    );
+}
 export default Picker;
+
 // Styles
 const styles = StyleSheet.create({
     container: {
@@ -136,34 +208,43 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: '100%'
     },
-    done: {},
+
+    done: {
+    },
+
     doneText: {
         color: '#5b87ba',
         paddingHorizontal: 12,
         paddingVertical: 8
     },
+
     header: {
         alignItems: 'flex-end',
         backgroundColor: '#ecedf0',
         flexGrow: 0,
     },
+
     item: {
         height: ITEM_HEIGHT,
         alignItems: 'center',
         justifyContent: 'center'
     },
+
     items: {
         height: (ITEM_HEIGHT * 3)
     },
+
     itemText: {
         color: '#000000',
         fontSize: 14
     },
+
     modal: {
         alignItems: 'flex-end',
         backgroundColor: '#00000080',
         flex: 1
     },
+
     overlay: {
         backgroundColor: 'transparent',
         bottom: 0,
@@ -172,10 +253,12 @@ const styles = StyleSheet.create({
         width: '100%',
         zIndex: 10
     },
+
     overlayFog: {
         backgroundColor: '#caced6d9',
         height: ITEM_HEIGHT
     },
+
     overlaySelected: {
         borderBottomWidth: 2,
         borderColor: '#b9bec6',
