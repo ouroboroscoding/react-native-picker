@@ -35,21 +35,61 @@ Add the ```Picker``` to your component:
 
 ```javascript
 <Picker
-	options={[
-		{value: 'CA', text: 'Canada'},
-		{value: 'MX', text: 'Mexico'},
-		{value: 'US', text: 'United States'}
-	]}
-	onChanged={setPicker}
-	style={{borderWidth: 1, borderColor: '#a7a7a7', borderRadius: 5, marginBottom: 5, padding: 5}}
-	value={picker}
+    onChanged={setPicker}
+    options={[
+        {value: 'CA', text: 'Canada'},
+        {value: 'MX', text: 'Mexico'},
+        {value: 'US', text: 'United States'}
+    ]}
+    style={{borderWidth: 1, borderColor: '#a7a7a7', borderRadius: 5, marginBottom: 5, padding: 5}}
+    value={picker}
 />
+```
+
+## Custom Display
+
+Instead of defaulting to a read-only TextInput, you can specify your own component to handle displaying the currently selected value.
+
+```javascript
+import Picker from '@ouroboros/react-native-picker';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+
+function PickerDisplay(props) {
+    return (
+        <View>
+            <Text>{props.text}</Text>
+            <FontAwesomeIcon icon={faCaretDown} />
+        </View>
+    );
+}
+
+function App() {
+    let [picker, setPicker] = useState('CA');
+    return (
+        <View>
+            <Picker
+                component={PickerDisplay}
+                onChanged={setPicker}
+                options={[
+                    {value: 'CA', text: 'Canada'},
+                    {value: 'MX', text: 'Mexico'},
+                    {value: 'US', text: 'United States'}
+                ]}
+                value={picker}
+            />
+        </View>
+    );
+}
 ```
 
 ## Props
 
 | Name | Type | Required | Description |
 |--|--|--|--|
+| component | Component | No | A React component which will be used to generate the display instead of a TextInput. Receives the `text` prop which corresponds to the text of the currently selected option. If set, `style` and `textAlign` props are ignored. |
 | onChanged | Function | Yes | A callback function which receives the new value selected by the user as the only argument |
 | options | Object[] | Yes | Array of Objects with the value and text properties for each option to be shown |
 | style | object\|object[] | No | A single Obejct of styles values or an Array of styles objects to be passed to the input displayed in your component |
