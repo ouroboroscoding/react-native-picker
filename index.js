@@ -26,9 +26,9 @@ const ITEM_HEIGHT = 40;
 const Picker = (props) => {
     // State
     const [open, openSet] = useState(false);
+    const [scroll, scrollSet] = useState(null);
     const [text, textSet] = useState('');
     // Refs
-    const scrollRef = useRef(null);
     const scrollTimer = useRef(null);
     // Value effect
     useEffect(() => {
@@ -38,14 +38,14 @@ const Picker = (props) => {
     // Open effect
     useEffect(() => {
         // If we have a ref to the scroll view
-        if (scrollRef.current) {
+        if (scroll) {
             // Get the index of the value
             const i = afindi(props.options, 'value', open);
             if (i > -1) {
                 scrollTo(i);
             }
         }
-    }, [open]);
+    }, [open, scroll]);
     // Called to set the new value
     function done() {
         // If the value changed, notify the parent
@@ -79,9 +79,9 @@ const Picker = (props) => {
     // Called to scroll the view to the index
     function scrollTo(i) {
         // Assuming we have the ref
-        if (scrollRef.current) {
+        if (scroll) {
             // Scroll to the given item based on index and item height
-            scrollRef.current.scrollTo({
+            scroll.scrollTo({
                 x: 0,
                 y: i * ITEM_HEIGHT,
                 animated: true
@@ -106,7 +106,7 @@ const Picker = (props) => {
                                     <Text style={styles.doneText}>Done</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView bounces={false} onScroll={scrolled} ref={scrollRef} style={styles.items}>
+                            <ScrollView bounces={false} onScroll={scrolled} ref={scrollSet} style={styles.items}>
                                 <View style={styles.item}></View>
                                 {props.options.map(o => <Pressable key={o.value} onPress={() => openSet(o.value)}>
                                         <View style={styles.item}>

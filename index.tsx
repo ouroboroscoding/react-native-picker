@@ -59,10 +59,10 @@ const Picker = (props: PickerProps) => {
 
     // State
     const [open, openSet] = useState(false);
+    const [scroll, scrollSet] = useState<ScrollView | null>(null);
     const [text, textSet] = useState('');
 
     // Refs
-    const scrollRef = useRef<ScrollView | null>(null);
     const scrollTimer = useRef<number | null>(null);
 
     // Value effect
@@ -75,7 +75,7 @@ const Picker = (props: PickerProps) => {
     useEffect(() => {
 
         // If we have a ref to the scroll view
-        if(scrollRef.current) {
+        if(scroll) {
 
             // Get the index of the value
             const i = afindi(props.options, 'value', open);
@@ -83,7 +83,7 @@ const Picker = (props: PickerProps) => {
                 scrollTo(i);
             }
         }
-    }, [open]);
+    }, [open, scroll]);
 
     // Called to set the new value
     function done() {
@@ -127,10 +127,10 @@ const Picker = (props: PickerProps) => {
     function scrollTo(i: number) {
 
         // Assuming we have the ref
-        if(scrollRef.current) {
+        if(scroll) {
 
             // Scroll to the given item based on index and item height
-            scrollRef.current.scrollTo({
+            scroll.scrollTo({
                 x: 0,
                 y: i * ITEM_HEIGHT,
                 animated: true
@@ -171,7 +171,7 @@ const Picker = (props: PickerProps) => {
                             <ScrollView
                                 bounces={false}
                                 onScroll={scrolled}
-                                ref={scrollRef}
+                                ref={scrollSet}
                                 style={styles.items}
                             >
                                 <View style={styles.item}></View>
