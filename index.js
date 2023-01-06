@@ -9,7 +9,7 @@
  */
 // NPM Imports
 import { afindi, afindo } from '@ouroboros/tools';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 // Constants
 const ITEM_HEIGHT = 40;
