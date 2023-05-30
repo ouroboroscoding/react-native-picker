@@ -127,7 +127,7 @@ const Picker = (props) => {
 									<Text style={styleObject.current.doneText}>Done</Text>
 								</TouchableOpacity>
 							</View>
-							<ScrollView bounces={false} onScroll={scrolled} ref={scrollSet} style={styleObject.current.items}>
+							<ScrollView bounces={false} onScroll={scrolled} ref={scrollSet} scrollEventThrottle={0} style={styleObject.current.items}>
 								<View style={styleObject.current.item}></View>
 								{props.options.map(o => <Pressable key={o.value} onPress={() => openSet(o.value)}>
 										<View style={styleObject.current.item}>
