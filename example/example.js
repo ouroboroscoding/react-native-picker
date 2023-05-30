@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 import Picker from '@ouroboros/react-native-picker';
 
 import Countries from './countries.json';

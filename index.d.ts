@@ -15,6 +15,8 @@ interface PickerOption {
 declare type PickerOnChanged = (value: any) => void;
 declare type PickerProps = {
     component?: React.ElementType;
+    fontSize?: number;
+    itemHeight?: number;
     onChanged: PickerOnChanged;
     options: PickerOption[];
     style?: StyleProp<TextStyle>;
