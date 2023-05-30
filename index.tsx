@@ -202,6 +202,7 @@ const Picker = (props: PickerProps) => {
 								bounces={false}
 								onScroll={scrolled}
 								ref={scrollSet}
+								scrollEventThrottle={0}
 								style={styleObject.current.items}
 							>
 								<View style={styleObject.current.item}></View>
